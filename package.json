@@ -1,7 +1,7 @@
 {
   "name": "@jharmelink/list",
   "description": "Array management using a list object",
-  "version": "1.0.34",
+  "version": "1.0.35",
   "author": "Jan Willem Harmelink",
   "license": "GPL-3.0-only",
   "type": "module",
