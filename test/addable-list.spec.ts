@@ -1,4 +1,4 @@
-import { Addable, AddableList } from '@codura/list';
+import { Addable, AddableList } from '@jharmelink/list';
 import { describe, expect, it } from 'vitest';
 
 class MockAddable implements Addable<MockAddable> {

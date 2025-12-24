@@ -1,4 +1,4 @@
-import { NumberList } from '@codura/list';
+import { NumberList } from '@jharmelink/list';
 import { describe, expect, it } from 'vitest';
 
 describe('NumberList', () => {

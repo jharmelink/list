@@ -1,4 +1,4 @@
-import { Comparable, ComparableList } from '@codura/list';
+import { Comparable, ComparableList } from '@jharmelink/list';
 import { describe, expect, it } from 'vitest';
 
 class MockComparable implements Comparable<MockComparable> {

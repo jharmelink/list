@@ -1,4 +1,4 @@
-import { List, Mergeable } from '@codura/list';
+import { List, Mergeable } from '@jharmelink/list';
 import { describe, expect, it } from 'vitest';
 
 class TestMergeable implements Mergeable<TestMergeable> {

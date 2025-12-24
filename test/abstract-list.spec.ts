@@ -1,4 +1,4 @@
-import { List } from '@codura/list';
+import { List } from '@jharmelink/list';
 import { describe, expect, it } from 'vitest';
 
 class Mock {

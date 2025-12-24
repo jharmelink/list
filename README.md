@@ -30,19 +30,19 @@
 Using [Yarn](https://classic.yarnpkg.com/lang/en/docs/install/)
 
 ```sh
-yarn add @codura/list
+yarn add @jharmelink/list
 ```
 
 Using [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
 ```shell
-npm install @codura/list
+npm install @jharmelink/list
 ```
 
 ## Usage
 
 ```ts
-import { List } from '@codura/list';
+import { List } from '@jharmelink/list';
 
 const myList = List.of(1, 2, 3);
 ```
@@ -54,19 +54,19 @@ const myList = List.of(1, 2, 3);
 Create a new `AddableList` from an `Array`
 
 ```ts
-import { AddableList } from '@codura/list';
+import { AddableList } from '@jharmelink/list';
 
 const addableList = AddableList.from([1, 2, 3]); // AddableList([1, 2, 3])
 ```
 
 ```ts
-import { AddableList } from '@codura/list';
+import { AddableList } from '@jharmelink/list';
 
 const addableList = AddableList.of(1, 2, 3); // AddableList([1, 2, 3])
 ```
 
 ```ts
-import { AddableList, List } from '@codura/list';
+import { AddableList, List } from '@jharmelink/list';
 
 const addableList = List.of({ n: 1 }, { n: 2 }, { n: 3 }).toAddableList(item => item.n); // AddableList([1, 2, 3])
 ```
@@ -76,7 +76,7 @@ const addableList = List.of({ n: 1 }, { n: 2 }, { n: 3 }).toAddableList(item => 
 Add custom `Addable` objects in a `AddableList`
 
 ```ts
-import { Addable, AddableList } from '@codura/list';
+import { Addable, AddableList } from '@jharmelink/list';
 
 class Payment implements Addable<Payment> {
   constructor(readonly note: string, readonly amount: number) {
@@ -98,7 +98,7 @@ const sum = payments.add(new Payment('sum', 0)); // Payment('sum', 600)
 Add decimals in a `AddableList` using [decimal.js](https://www.npmjs.com/package/decimal.js)
 
 ```ts
-import { AddableList } from '@codura/list';
+import { AddableList } from '@jharmelink/list';
 import Decimal from 'decimal.js';
 
 const decimals = AddableList.of(
@@ -114,14 +114,14 @@ const sum = payments.add(new Decimal(0)); // Decimal(70.03345)
 Create a new `ComparableList` from an `Array` using [decimal.js](https://www.npmjs.com/package/decimal.js)
 
 ```ts
-import { ComparableList } from '@codura/list';
+import { ComparableList } from '@jharmelink/list';
 import Decimal from 'decimal.js';
 
 const comparableList = ComparableList.from([new Decimal(1), new Decimal(2), new Decimal(3)]); // ComparableList([Decimal(1), Decimal(2), Decimal(3)])
 ```
 
 ```ts
-import { ComparableList } from '@codura/list';
+import { ComparableList } from '@jharmelink/list';
 import Decimal from 'decimal.js';
 
 const comparableList = ComparableList.of(new Decimal(1), new Decimal(2), new Decimal(3)); // ComparableList([Decimal(1), Decimal(2), Decimal(3)])
@@ -130,7 +130,7 @@ const comparableList = ComparableList.of(new Decimal(1), new Decimal(2), new Dec
 Create a `ComparableList` from an `List` using [decimal.js](https://www.npmjs.com/package/decimal.js)
 
 ```ts
-import { ComparableList, List } from '@codura/list';
+import { ComparableList, List } from '@jharmelink/list';
 import Decimal from 'decimal.js';
 
 const comparableList = List.of({ n: new Decimal(1) }, { n: new Decimal(2) }, { n: new Decimal(3) }).toComparableList(item => item.n); // ComparableList([Decimal(1), Decimal(2), Decimal(3)])
@@ -141,7 +141,7 @@ const comparableList = List.of({ n: new Decimal(1) }, { n: new Decimal(2) }, { n
 Check if two `ComparableList`s, containing custom comparable objects, are equal
 
 ```ts
-import { type Comparable, ComparableList } from '@codura/list';
+import { type Comparable, ComparableList } from '@jharmelink/list';
 
 class ComparableItem implements Comparable<ComparableItem> {
   constructor(readonly item: string) {
@@ -161,7 +161,7 @@ Check if two `ComparableList`s, containing decimals, are equal
 using [decimal.js](https://www.npmjs.com/package/decimal.js)
 
 ```ts
-import { ComparableList } from '@codura/list';
+import { ComparableList } from '@jharmelink/list';
 import Decimal from 'decimal.js';
 
 const decimals1 = ComparableList.from(
@@ -182,13 +182,13 @@ const areEqual = decimals1.equals(decimals2); // true
 Create a new `List` from an `Array`
 
 ```ts
-import { List } from '@codura/list';
+import { List } from '@jharmelink/list';
 
 const list = List.from([1, 2, 3]); // List([1, 2, 3])
 ```
 
 ```ts
-import { List } from '@codura/list';
+import { List } from '@jharmelink/list';
 
 const list = List.of(1, 2, 3); // List([1, 2, 3])
 ````
@@ -198,7 +198,7 @@ const list = List.of(1, 2, 3); // List([1, 2, 3])
 Remove duplicates from a `List` using a **key function**
 
 ```ts
-import { List } from '@codura/list';
+import { List } from '@jharmelink/list';
 
 const usersWithDuplicates = List.of(
   { id: '1', gender: 'male', name: 'John' },
@@ -211,7 +211,7 @@ const usersWithoutDuplicates = usersWithDuplicates.distinctBy(user => user.id); 
 Remove duplicates from a `List` using a **key function** and a **value function**
 
 ```ts
-import { List } from '@codura/list';
+import { List } from '@jharmelink/list';
 
 const usersWithDuplicates = List.of(
   { id: '1', gender: 'male', name: 'John' },
@@ -226,7 +226,7 @@ const namesWithoutDuplicates = usersWithDuplicates.distinctBy(user => user.id, u
 Group a `List` to a `Map` using a **key function**
 
 ```ts
-import { List } from '@codura/list';
+import { List } from '@jharmelink/list';
 
 const users = List.of(
   { id: '1', gender: 'male', name: 'John' },
@@ -239,7 +239,7 @@ const usersByGroup = users.groupBy(user => user.gender); // Map([['male', [{id: 
 Group a `List` to a `map` using a **key function** and a **value function**
 
 ```ts
-import { List } from '@codura/list';
+import { List } from '@jharmelink/list';
 
 const users = List.of(
   { id: '1', gender: 'male', name: 'John' },
@@ -254,7 +254,7 @@ const userNamesById = users.groupBy(user => user.gender, user => user.name); // 
 Map a `List` to a `map` using a **key function**
 
 ```ts
-import { List } from '@codura/list';
+import { List } from '@jharmelink/list';
 
 const users = List.of(
   { id: '1', name: 'John' },
@@ -267,7 +267,7 @@ const usersById = users.mapBy(user => user.id); // Map([['1', {id: '1', gender: 
 Map a `List` to a `map` using a **key function** and a **value function**
 
 ```ts
-import { List } from '@codura/list';
+import { List } from '@jharmelink/list';
 
 const users = List.of(
   { id: '1', name: 'John' },
@@ -282,13 +282,13 @@ const userNamesById = users.mapBy(user => user.id, user => user.name); // Map([[
 Create a new `MergeableList` from an `Array`
 
 ```ts
-import { MergeableList } from '@codura/list';
+import { MergeableList } from '@jharmelink/list';
 
 const mergeableList = MergeableList.from([1, 2, 3]); // MergeableList([1, 2, 3])
 ```
 
 ```ts
-import { MergeableList } from '@codura/list';
+import { MergeableList } from '@jharmelink/list';
 
 const mergeableList = MergeableList.of(1, 2, 3); // MergeableList([1, 2, 3])
 ```
@@ -296,7 +296,7 @@ const mergeableList = MergeableList.of(1, 2, 3); // MergeableList([1, 2, 3])
 Create a `MergeableList` from an `List`
 
 ```ts
-import { MergeableList, List } from '@codura/list';
+import { MergeableList, List } from '@jharmelink/list';
 
 const mergeableList = List.of({ n: 1 }, { n: 2 }, { n: 3 }).toMergeableList(item => item.n); // MergeableList([1, 2, 3])
 ```
@@ -328,13 +328,13 @@ const sum = drinks.merge(drink => drink.name); // MergeableList([Drink('beer', 8
 Create a new `NumberList` from an `Array`
 
 ```ts
-import { NumberList } from '@codura/list';
+import { NumberList } from '@jharmelink/list';
 
 const numberList = NumberList.from([1, 2, 3]); // NumberList([1, 2, 3])
 ```
 
 ```ts
-import { NumberList } from '@codura/list';
+import { NumberList } from '@jharmelink/list';
 
 const numberList = NumberList.of(1, 2, 3); // NumberList([1, 2, 3])
 ```
@@ -342,7 +342,7 @@ const numberList = NumberList.of(1, 2, 3); // NumberList([1, 2, 3])
 Create a `NumberList` from an `List`
 
 ```ts
-import { NumberList, List } from '@codura/list';
+import { NumberList, List } from '@jharmelink/list';
 
 const numberList = List.of({ n: 1 }, { n: 2 }, { n: 3 }).toNumberList(item => item.n); // NumberList([1, 2, 3])
 ```
@@ -352,7 +352,7 @@ const numberList = List.of({ n: 1 }, { n: 2 }, { n: 3 }).toNumberList(item => it
 Max number in a `NumberList`
 
 ```ts
-import { NumberList } from '@codura/list';
+import { NumberList } from '@jharmelink/list';
 
 const numbers = NumberList.of(1, 2, 3).max(); // 3
 ```
@@ -362,7 +362,7 @@ const numbers = NumberList.of(1, 2, 3).max(); // 3
 Min number in a `NumberList`
 
 ```ts
-import { NumberList } from '@codura/list';
+import { NumberList } from '@jharmelink/list';
 
 const numbers = NumberList.of(1, 2, 3).min(); // 1
 ```
@@ -372,7 +372,7 @@ const numbers = NumberList.of(1, 2, 3).min(); // 1
 Subtract all numbers in a `NumberList`
 
 ```ts
-import { NumberList } from '@codura/list';
+import { NumberList } from '@jharmelink/list';
 
 const numbers = NumberList.of(1, 2, 3).subtract(6); // 0
 ```
@@ -382,7 +382,7 @@ const numbers = NumberList.of(1, 2, 3).subtract(6); // 0
 Sum all numbers in a `NumberList`
 
 ```ts
-import { NumberList } from '@codura/list';
+import { NumberList } from '@jharmelink/list';
 
 const numbers = NumberList.of(1, 2, 3).sum(); // 6
 ```
@@ -392,13 +392,13 @@ const numbers = NumberList.of(1, 2, 3).sum(); // 6
 Create a new `StringList` from an `Array`
 
 ```ts
-import { StringList } from '@codura/list';
+import { StringList } from '@jharmelink/list';
 
 const stringList = StringList.from(['a', 'b', 'c']); // StringList(['a', 'b', 'c'])
 ```
 
 ```ts
-import { StringList } from '@codura/list';
+import { StringList } from '@jharmelink/list';
 
 const stringList = StringList.of('a', 'b', 'c'); // StringList(['a', 'b', 'c'])
 ```
@@ -406,7 +406,7 @@ const stringList = StringList.of('a', 'b', 'c'); // StringList(['a', 'b', 'c'])
 Create a `StringList` from an `List`
 
 ```ts
-import { StringList, List } from '@codura/list';
+import { StringList, List } from '@jharmelink/list';
 
 const stringList = List.of({ n: 'a' }, { n: 'b' }, { n: 'c' }).toStringList(item => item.n); // StringList(['a', 'b', 'c'])
 ```
@@ -416,7 +416,7 @@ const stringList = List.of({ n: 'a' }, { n: 'b' }, { n: 'c' }).toStringList(item
 Join all strings in a `StringList`
 
 ```ts
-import { StringList } from '@codura/list';
+import { StringList } from '@jharmelink/list';
 
 const strings = StringList.of('a', 'b', 'c').join(); // 'abc'
 ```

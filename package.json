@@ -1,5 +1,5 @@
 {
-  "name": "@codura/list",
+  "name": "@jharmelink/list",
   "description": "Array management using a list object",
   "version": "1.0.34",
   "author": "Jan Willem Harmelink",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/codura-nl/list.git"
+    "url": "git+https://github.com/jharmelink/list.git"
   },
   "exports": {
     ".": {

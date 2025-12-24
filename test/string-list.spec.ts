@@ -1,4 +1,4 @@
-import { StringList } from '@codura/list';
+import { StringList } from '@jharmelink/list';
 import { describe, expect, it } from 'vitest';
 
 describe('StringList', () => {
