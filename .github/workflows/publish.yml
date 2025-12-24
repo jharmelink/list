@@ -9,10 +9,9 @@ on:
     paths-ignore:
       - '.github/**'
 
-env:
-  NODE_AUTH_TOKEN: ${{ secrets.GH_READ_TOKEN }}
-
-permissions: write-all
+permissions:
+  id-token: write # Required for OIDC
+  contents: read
 
 concurrency:
   group: publish
@@ -23,14 +22,14 @@ jobs:
     name: install
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/cache@v4
         with:
           path: node_modules
           key: ${{ runner.OS }}-build-${{ hashFiles('**/yarn.lock') }}
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: '22.x'
+          node-version: '24'
           registry-url: 'https://registry.npmjs.org'
       - name: install
         run: yarn
@@ -40,5 +39,3 @@ jobs:
         run: yarn test
       - name: release
         run: yarn release
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
