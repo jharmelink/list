@@ -10,7 +10,7 @@ import { Shuffle } from '~/util/shuffle';
 import { Sort } from '~/util/sort';
 
 export class AddableList<T extends Addable<T>> extends AbstractList<T> {
-  constructor(items?: T[]) {
+  constructor(items?: readonly T[]) {
     super(items);
   }
 
@@ -18,7 +18,7 @@ export class AddableList<T extends Addable<T>> extends AbstractList<T> {
     return new AddableList(Array.from(iterable ?? []));
   }
 
-  static of<T extends Addable<T>>(...items: T[]): AddableList<T> {
+  static of<T extends Addable<T>>(...items: readonly T[]): AddableList<T> {
     return new AddableList(items);
   }
 
@@ -46,9 +46,9 @@ export class AddableList<T extends Addable<T>> extends AbstractList<T> {
     return AddableList.from(Distinct.distinctBy(this.items, identifier));
   }
 
-  filter<S extends T & AddableList<S>>(predicate: (item: T, index?: number, array?: T[]) => item is S): AddableList<S>;
-  filter(predicate: (value: T, index?: number, array?: T[]) => boolean): AddableList<T>;
-  filter<S extends T & AddableList<S>>(predicate: (item: T, index?: number, array?: T[]) => item is S): AddableList<S> {
+  filter<S extends T & AddableList<S>>(predicate: (item: T, index?: number, array?: readonly T[]) => item is S): AddableList<S>;
+  filter(predicate: (value: T, index?: number, array?: readonly T[]) => boolean): AddableList<T>;
+  filter<S extends T & AddableList<S>>(predicate: (item: T, index?: number, array?: readonly T[]) => item is S): AddableList<S> {
     return new AddableList(this.items.filter(predicate));
   }
 
@@ -59,27 +59,27 @@ export class AddableList<T extends Addable<T>> extends AbstractList<T> {
     return new AddableList(Empty.filter(this.items, value));
   }
 
-  flatMap<K extends Addable<K>>(mapper: (item: T, index?: number, array?: T[]) => K[]): AddableList<K> {
+  flatMap<K extends Addable<K>>(mapper: (item: T, index?: number, array?: readonly T[]) => readonly K[]): AddableList<K> {
     return new AddableList(this.items.flatMap(mapper));
   }
 
-  flattenToComparableList<K extends Comparable<K>>(mapper: (item: T) => K[]): ComparableList<K> {
+  flattenToComparableList<K extends Comparable<K>>(mapper: (item: T) => readonly K[]): ComparableList<K> {
     return new ComparableList(this.items.flatMap(item => mapper(item)));
   }
 
-  flattenToMergeableList<K extends Mergeable<K>>(mapper: (item: T) => K[]): MergeableList<K> {
+  flattenToMergeableList<K extends Mergeable<K>>(mapper: (item: T) => readonly K[]): MergeableList<K> {
     return new MergeableList(this.items.flatMap(item => mapper(item)));
   }
 
-  flattenToNumberList(mapper: (item: T) => number[]): NumberList {
+  flattenToNumberList(mapper: (item: T) => readonly number[]): NumberList {
     return new NumberList(this.items.flatMap(item => mapper(item)));
   }
 
-  flattenToStringList(mapper: (item: T) => string[]): StringList {
+  flattenToStringList(mapper: (item: T) => readonly string[]): StringList {
     return new StringList(this.items.flatMap(item => mapper(item)));
   }
 
-  map<K extends Addable<K>>(mapper: (value: T, index?: number, array?: T[]) => K): AddableList<K> {
+  map<K extends Addable<K>>(mapper: (value: T, index?: number, array?: readonly T[]) => K): AddableList<K> {
     return new AddableList(this.items.map(mapper));
   }
 
@@ -111,7 +111,7 @@ export class AddableList<T extends Addable<T>> extends AbstractList<T> {
     return new StringList(this.items.map(item => mapper(item)));
   }
 
-  private isAddable(object: any): object is Addable<T> {
-    return 'add' in object;
+  private isAddable(object: unknown): object is Addable<T> {
+    return typeof object === 'object' && object !== null && 'add' in object;
   }
 }

@@ -5,7 +5,7 @@ export class Distinct {
     return set.values();
   }
 
-  static distinctBy<T, K, L>(items: T[], identifier: (item: T) => K, mapper?: (item: T) => L): Iterable<T | L> {
+  static distinctBy<T, K, L>(items: readonly T[], identifier: (item: T) => K, mapper?: (item: T) => L): Iterable<T | L> {
     if (!mapper) {
       const map = items.reduce((acc: Map<K, T>, cur: T) => {
         const key = identifier(cur);

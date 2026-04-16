@@ -1,0 +1,39 @@
+branches:
+  - main
+  - name: 'current-branch'
+    prerelease: '${name.replace(/\//g, "-")}'
+
+plugins:
+  - '@semantic-release/commit-analyzer'
+  - '@semantic-release/github'
+  - '@semantic-release/npm'
+  - '@semantic-release/release-notes-generator'
+
+analyzeCommits:
+  - path: '@semantic-release/commit-analyzer'
+generateReleaseNotes:
+  - path: '@semantic-release/release-notes-generator'
+    writerOpts:
+      groupBy: 'type'
+      commitGroupsSort:
+        - feat
+        - fix
+      commitsSort: 'header'
+    types:
+      - type: breaking
+        section: 'Breaking changes'
+      - type: feat
+        section: 'Features'
+      - type: fix
+        section: 'Bug fixes'
+      - type: chore
+        hidden: true
+      - type: perf
+        hidden: true
+      - type: test
+        hidden: true
+    presetConfig: true
+publishPackage:
+  - path: '@semantic-release/npm'
+publishRelease:
+  - path: '@semantic-release/github'
