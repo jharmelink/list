@@ -43,7 +43,7 @@ jobs:
           node-version: 24.x
           registry-url: https://registry.npmjs.org
       - name: Replace branch name in branches array
-        run: sed -i 's|'current-branch'|'${{ github.ref_name }}'|' .releaserc.yaml
+        run: sed -i "s|'current-branch'|'${{ github.ref_name }}'|" .releaserc.yaml
       - name: Install dependencies
         run: yarn
       - name: Build
