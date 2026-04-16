@@ -53,3 +53,5 @@ jobs:
         run: yarn test:coverage
       - name: Semantic release
         uses: cycjimmy/semantic-release-action@v6
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
