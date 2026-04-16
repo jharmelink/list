@@ -35,16 +35,19 @@
     "lint:fix": "eslint \"src/**/*.ts\" --fix",
     "prebuild": "rimraf dist",
     "release": "npx semantic-release",
-    "test": "vitest run",
-    "test:update": "vitest run -u"
+    "test": "vitest run --typecheck",
+    "test:coverage": "vitest run --coverage --typecheck",
+    "test:update": "vitest run -u --typecheck"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^20.5.0",
-    "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/exec": "^7.1.0",
-    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/github": "^12.0.6",
+    "@semantic-release/npm": "^13.1.5",
+    "@semantic-release/release-notes-generator": "^14.1.0",
     "@types/node": "^25.6.0",
+    "@vitest/coverage-v8": "^4.0.18",
     "eslint": "^9.39.4",
     "prettier": "^3.8.3",
     "replace-json-property": "^1.9.0",
@@ -54,9 +57,9 @@
     "typescript": "^6.0.2",
     "typescript-eslint": "^8.58.2",
     "vite": "^8.0.8",
-    "vitest": "^4.1.4",
     "vite-plugin-dts": "^4.5.4",
-    "vite-tsconfig-paths": "^6.1.1"
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^4.1.4"
   },
   "engines": {
     "node": ">=22.14.0"

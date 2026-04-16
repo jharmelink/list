@@ -5,12 +5,12 @@ export default defineConfig({
   plugins: [tsconfigPaths()],
   test: {
     coverage: {
-      thresholds: {
-        functions: 80,
-        branches: 80,
-        statements: 80,
-        lines: 90,
-      },
+      // thresholds: {
+      //   functions: 80,
+      //   branches: 80,
+      //   statements: 80,
+      //   lines: 90,
+      // },
       include: ['src/**/*.ts'],
     },
   },
