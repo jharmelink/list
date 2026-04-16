@@ -11,6 +11,7 @@
       ]
     },
     "removeComments": false,
+    "rootDir": "src",
     "strict": true,
     "target": "ESNext"
   },
