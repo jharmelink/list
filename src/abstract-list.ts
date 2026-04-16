@@ -1,7 +1,7 @@
 export abstract class AbstractList<T> {
-  protected readonly items: T[]
+  protected readonly items: readonly T[];
 
-  protected constructor(items?: T[]) {
+  protected constructor(items?: readonly T[]) {
     this.items = items ?? [];
   }
 
@@ -9,7 +9,7 @@ export abstract class AbstractList<T> {
     return this.items.length;
   }
 
-  every(predicate: (item: T, index?: number, array?: T[]) => boolean): boolean {
+  every(predicate: (item: T, index?: number, array?: readonly T[]) => boolean): boolean {
     return this.items.every(predicate);
   }
 
@@ -23,7 +23,7 @@ export abstract class AbstractList<T> {
     return this.items[this.items.length - 1];
   }
 
-  findIndex(predicate: (item: T, index?: number, array?: T[]) => boolean): number {
+  findIndex(predicate: (item: T, index?: number, array?: readonly T[]) => boolean): number {
     return this.items.findIndex(predicate);
   }
 
@@ -35,11 +35,11 @@ export abstract class AbstractList<T> {
     return this.items[index];
   }
 
-  groupBy<K>(identifier: (item: T) => K): Map<K, T[]>;
+  groupBy<K>(identifier: (item: T) => K): Map<K, readonly T[]>;
 
-  groupBy<K, L>(identifier: (item: T) => K, mapper: (item: T) => L): Map<K, L[]>;
+  groupBy<K, L>(identifier: (item: T) => K, mapper: (item: T) => L): Map<K, readonly L[]>;
 
-  groupBy<K, L>(identifier: (item: T) => K, mapper?: (item: T) => L): Map<K, T[] | L[]> {
+  groupBy<K, L>(identifier: (item: T) => K, mapper?: (item: T) => L): Map<K, readonly T[] | readonly L[]> {
     if (!mapper) {
       return this.reduce((acc: Map<K, T[]>, cur: T) => {
         const key = identifier(cur);
@@ -95,15 +95,15 @@ export abstract class AbstractList<T> {
     }, new Map<K, L>());
   }
 
-  reduce<K>(reducer: (acc: K, cur: T, index?: number, array?: T[]) => K, initialValue: K): K {
+  reduce<K>(reducer: (acc: K, cur: T, index?: number, array?: readonly T[]) => K, initialValue: K): K {
     return this.items.reduce(reducer, initialValue);
   }
 
-  some(predicate: (item: T, index?: number, array?: T[]) => boolean): boolean {
+  some(predicate: (item: T, index?: number, array?: readonly T[]) => boolean): boolean {
     return this.items.some(predicate);
   }
 
-  toArray(): T[] {
+  toArray(): readonly T[] {
     return this.items;
   }
 }

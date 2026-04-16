@@ -18,7 +18,7 @@ describe('AbstractList', () => {
   });
 
   it('should support null', () => {
-    const list = List.from(null as unknown as Mock[]);
+    const list = List.from(null as unknown as MocReadonlyArray<K>);
 
     expect(list.length).toBe(0);
   });

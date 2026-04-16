@@ -1,5 +1,5 @@
 export class Sort {
-  static sort<T>(items: T[], identifier: (item: T) => number | string, reverse = false): T[] {
+  static sort<T>(items: readonly T[], identifier: (item: T) => number | string, reverse = false): readonly T[] {
     return items.toSorted((a, b) => {
       const aValue = identifier(reverse ? b : a);
       const bValue = identifier(reverse ? a : b);

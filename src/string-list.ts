@@ -9,7 +9,7 @@ import { Empty } from '~/util/empty';
 import { Shuffle } from '~/util/shuffle';
 
 export class StringList extends AbstractList<string> {
-  constructor(items?: string[]) {
+  constructor(items?: readonly string[]) {
     super(items);
   }
 
@@ -17,7 +17,7 @@ export class StringList extends AbstractList<string> {
     return new StringList(Array.from(iterable ?? []));
   }
 
-  static of(...items: string[]): StringList {
+  static of(...items: readonly string[]): StringList {
     return new StringList(items);
   }
 
@@ -33,7 +33,7 @@ export class StringList extends AbstractList<string> {
     return StringList.from(Distinct.distinct(this.items));
   }
 
-  filter(predicate: (value: string, index?: number, array?: string[]) => boolean): StringList {
+  filter(predicate: (value: string, index?: number, array?: readonly string[]) => boolean): StringList {
     return new StringList(this.items.filter(predicate));
   }
 
@@ -41,23 +41,23 @@ export class StringList extends AbstractList<string> {
     return new StringList(Empty.filter(this.items));
   }
 
-  flatMap(mapper: (item: string, index?: number, array?: string[]) => string[]): StringList {
+  flatMap(mapper: (item: string, index?: number, array?: readonly string[]) => readonly string[]): StringList {
     return new StringList(this.items.flatMap(mapper));
   }
 
-  flattenToAddableList<K extends Addable<K>>(mapper: (item: string) => K[]): AddableList<K> {
+  flattenToAddableList<K extends Addable<K>>(mapper: (item: string) => readonly K[]): AddableList<K> {
     return new AddableList(this.items.flatMap(item => mapper(item)));
   }
 
-  flattenToComparableList<K extends Comparable<K>>(mapper: (item: string) => K[]): ComparableList<K> {
+  flattenToComparableList<K extends Comparable<K>>(mapper: (item: string) => readonly K[]): ComparableList<K> {
     return new ComparableList(this.items.flatMap(item => mapper(item)));
   }
 
-  flattenToMergeableList<K extends Mergeable<K>>(mapper: (item: string) => K[]): MergeableList<K> {
+  flattenToMergeableList<K extends Mergeable<K>>(mapper: (item: string) => readonly K[]): MergeableList<K> {
     return new MergeableList(this.items.flatMap(item => mapper(item)));
   }
 
-  flattenToNumberList(mapper: (item: string) => number[]): NumberList {
+  flattenToNumberList(mapper: (item: string) => readonly number[]): NumberList {
     return new NumberList(this.items.flatMap(item => mapper(item)));
   }
 
@@ -65,7 +65,7 @@ export class StringList extends AbstractList<string> {
     return this.items.join(separator);
   }
 
-  map(mapper: (value: string, index?: number, array?: string[]) => string): StringList {
+  map(mapper: (value: string, index?: number, array?: readonly string[]) => string): StringList {
     return new StringList(this.items.map(mapper));
   }
 
