@@ -42,8 +42,6 @@ export class NumberList extends AbstractList<number> {
   }
 
   flatMap(mapper: (item: number, index?: number, array?: readonly number[]) => readonly number[]): NumberList {
-    [1, 2].flatMap((item) => [item, item + 1]);
-
     return new NumberList(this.items.flatMap(mapper));
   }
 

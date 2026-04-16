@@ -53,6 +53,3 @@ jobs:
         run: yarn test:coverage
       - name: Semantic release
         uses: cycjimmy/semantic-release-action@v6
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
