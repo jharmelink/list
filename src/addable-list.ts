@@ -6,8 +6,6 @@ import { NumberList } from '~/number-list';
 import { StringList } from '~/string-list';
 import { Distinct } from '~/util/distinct';
 import { Empty } from '~/util/empty';
-import { Shuffle } from '~/util/shuffle';
-import { Sort } from '~/util/sort';
 
 export class AddableList<T extends Addable<T>> extends AbstractList<T> {
   constructor(items?: readonly T[]) {
@@ -34,14 +32,6 @@ export class AddableList<T extends Addable<T>> extends AbstractList<T> {
     }, initialValue);
   }
 
-  concat(items?: ConcatArray<T>): AddableList<T> {
-    if (!items) {
-      return this;
-    }
-
-    return new AddableList(this.items.concat(items));
-  }
-
   distinctBy<K>(identifier: (item: T) => K): AddableList<T> {
     return AddableList.from(Distinct.distinctBy(this.items, identifier));
   }
@@ -60,7 +50,7 @@ export class AddableList<T extends Addable<T>> extends AbstractList<T> {
   }
 
   flatMap<K extends Addable<K>>(mapper: (item: T, index?: number, array?: readonly T[]) => readonly K[]): AddableList<K> {
-    return new AddableList(this.items.flatMap((element) => mapper(element)));
+    return new AddableList(this.items.flatMap(element => mapper(element)));
   }
 
   flattenToComparableList<K extends Comparable<K>>(mapper: (item: T) => readonly K[]): ComparableList<K> {
@@ -80,15 +70,7 @@ export class AddableList<T extends Addable<T>> extends AbstractList<T> {
   }
 
   map<K extends Addable<K>>(mapper: (value: T, index?: number, array?: readonly T[]) => K): AddableList<K> {
-    return new AddableList(this.items.map((element) => mapper(element)));
-  }
-
-  shuffle(): AddableList<T> {
-    return new AddableList(Shuffle.shuffle(this.items));
-  }
-
-  sortBy(identifier: (item: T) => number | string, reverse = false): AddableList<T> {
-    return new AddableList(Sort.sort(this.items, identifier, reverse));
+    return new AddableList(this.items.map(element => mapper(element)));
   }
 
   toComparableList<K extends Comparable<K>>(mapper: (item: T) => K): ComparableList<K> {
@@ -101,10 +83,6 @@ export class AddableList<T extends Addable<T>> extends AbstractList<T> {
 
   toNumberList(mapper: (item: T) => number): NumberList {
     return new NumberList(this.items.map(item => mapper(item)));
-  }
-
-  toSorted(compareFn: (a: T, b: T) => number): AddableList<T> {
-    return new AddableList(this.items.toSorted(compareFn));
   }
 
   toStringList(mapper: (item: T) => string): StringList {

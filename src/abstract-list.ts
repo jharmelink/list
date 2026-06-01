@@ -1,3 +1,6 @@
+import { Shuffle } from '~/util/shuffle';
+import { Sort } from '~/util/sort';
+
 export abstract class AbstractList<T> {
   protected readonly items: readonly T[];
 
@@ -7,6 +10,26 @@ export abstract class AbstractList<T> {
 
   get length(): number {
     return this.items.length;
+  }
+
+  protected create(items: readonly T[]): this {
+    return new (this.constructor as new (items?: readonly T[]) => this)(items);
+  }
+
+  concat(items?: ConcatArray<T>): this {
+    return items ? this.create(this.items.concat(items)) : this;
+  }
+
+  shuffle(): this {
+    return this.create(Shuffle.shuffle(this.items));
+  }
+
+  sortBy(identifier: (item: T) => number | string, reverse = false): this {
+    return this.create(Sort.sort(this.items, identifier, reverse));
+  }
+
+  toSorted(compareFn: (a: T, b: T) => number): this {
+    return this.create(this.items.toSorted(compareFn));
   }
 
   every(predicate: (item: T, index?: number, array?: readonly T[]) => boolean): boolean {

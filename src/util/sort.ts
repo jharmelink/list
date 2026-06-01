@@ -1,16 +1,21 @@
 export class Sort {
   static sort<T>(items: readonly T[], identifier: (item: T) => number | string, reverse = false): readonly T[] {
     return items.toSorted((a, b) => {
-      const aValue = identifier(reverse ? b : a);
-      const bValue = identifier(reverse ? a : b);
+      const compare = Sort.compare(identifier(a), identifier(b));
 
-      if (typeof aValue === 'string' && typeof bValue === 'string') {
-        return aValue.localeCompare(bValue);
-      } else if (typeof aValue === 'number' && typeof bValue === 'number') {
-        return aValue - bValue;
-      }
-
-      return 0;
+      return reverse ? -compare : compare;
     });
+  }
+
+  private static compare(a: number | string, b: number | string): number {
+    if (typeof a === 'string' && typeof b === 'string') {
+      return a.localeCompare(b);
+    }
+
+    if (typeof a === 'number' && typeof b === 'number') {
+      return a - b;
+    }
+
+    return 0;
   }
 }

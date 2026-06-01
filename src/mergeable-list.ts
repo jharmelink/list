@@ -6,8 +6,6 @@ import { NumberList } from '~/number-list';
 import { StringList } from '~/string-list';
 import { Distinct } from '~/util/distinct';
 import { Empty } from '~/util/empty';
-import { Shuffle } from '~/util/shuffle';
-import { Sort } from '~/util/sort';
 
 export class MergeableList<T extends Mergeable<T>> extends AbstractList<T> {
   constructor(items?: readonly T[]) {
@@ -20,14 +18,6 @@ export class MergeableList<T extends Mergeable<T>> extends AbstractList<T> {
 
   static of<T extends Mergeable<T>>(...items: readonly T[]): MergeableList<T> {
     return new MergeableList(items);
-  }
-
-  concat(items?: ConcatArray<T>): MergeableList<T> {
-    if (!items) {
-      return this;
-    }
-
-    return new MergeableList(this.items.concat(items));
   }
 
   distinctBy<K>(identifier: (item: T) => K): MergeableList<T> {
@@ -48,7 +38,7 @@ export class MergeableList<T extends Mergeable<T>> extends AbstractList<T> {
   }
 
   flatMap<K extends Mergeable<K>>(mapper: (item: T, index?: number, array?: readonly T[]) => readonly K[]): MergeableList<K> {
-    return new MergeableList(this.items.flatMap(mapper));
+    return new MergeableList(this.items.flatMap((item: T, index?: number, array?: readonly T[]) => mapper(item, index, array)));
   }
 
   flattenToAddableList<K extends Addable<K>>(mapper: (item: T) => readonly K[]): AddableList<K> {
@@ -68,7 +58,7 @@ export class MergeableList<T extends Mergeable<T>> extends AbstractList<T> {
   }
 
   map<K extends Mergeable<K>>(mapper: (value: T, index?: number, array?: readonly T[]) => K): MergeableList<K> {
-    return new MergeableList(this.items.map(mapper));
+    return new MergeableList(this.items.map((value: T, index?: number, array?: readonly T[]) => mapper(value, index, array)));
   }
 
   mergeBy<K>(identifier: (item: T) => K): MergeableList<T> {
@@ -91,14 +81,6 @@ export class MergeableList<T extends Mergeable<T>> extends AbstractList<T> {
     return new MergeableList(items);
   }
 
-  shuffle(): MergeableList<T> {
-    return new MergeableList(Shuffle.shuffle(this.items));
-  }
-
-  sortBy(identifier: (item: T) => number | string, reverse = false): MergeableList<T> {
-    return new MergeableList(Sort.sort(this.items, identifier, reverse));
-  }
-
   toAddableList<K extends Addable<K>>(mapper: (item: T) => K): AddableList<K> {
     return new AddableList(this.items.map(item => mapper(item)));
   }
@@ -109,10 +91,6 @@ export class MergeableList<T extends Mergeable<T>> extends AbstractList<T> {
 
   toNumberList(mapper: (item: T) => number): NumberList {
     return new NumberList(this.items.map(item => mapper(item)));
-  }
-
-  toSorted(compareFn: (a: T, b: T) => number): MergeableList<T> {
-    return new MergeableList(this.items.toSorted(compareFn));
   }
 
   toStringList(mapper: (item: T) => string): StringList {
