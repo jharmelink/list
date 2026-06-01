@@ -60,7 +60,7 @@ export class AddableList<T extends Addable<T>> extends AbstractList<T> {
   }
 
   flatMap<K extends Addable<K>>(mapper: (item: T, index?: number, array?: readonly T[]) => readonly K[]): AddableList<K> {
-    return new AddableList(this.items.flatMap(mapper));
+    return new AddableList(this.items.flatMap((element) => mapper(element)));
   }
 
   flattenToComparableList<K extends Comparable<K>>(mapper: (item: T) => readonly K[]): ComparableList<K> {
@@ -80,7 +80,7 @@ export class AddableList<T extends Addable<T>> extends AbstractList<T> {
   }
 
   map<K extends Addable<K>>(mapper: (value: T, index?: number, array?: readonly T[]) => K): AddableList<K> {
-    return new AddableList(this.items.map(mapper));
+    return new AddableList(this.items.map((element) => mapper(element)));
   }
 
   shuffle(): AddableList<T> {

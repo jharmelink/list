@@ -100,6 +100,14 @@ describe('List', () => {
     expect(shuffled.toArray().slice().sort()).toEqual([1, 2, 3, 4, 5]);
   });
 
+  it('should not mutate the source list when shuffled', () => {
+    const list = List.of(1, 2, 3, 4, 5);
+
+    list.shuffle();
+
+    expect(list.toArray()).toEqual([1, 2, 3, 4, 5]);
+  });
+
   it('should sortBy descending', () => {
     const list = List.of({ n: 3 }, { n: 1 }, { n: 2 });
 

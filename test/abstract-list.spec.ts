@@ -113,6 +113,62 @@ describe('AbstractList', () => {
     expect(total).toBe(6);
   });
 
+  it('should forward index and array to every predicate', () => {
+    const list = List.of(mock1, mock2, mock3);
+    const indices: number[] = [];
+
+    list.every((item, index, array) => {
+      indices.push(index!);
+      expect(array).toEqual([mock1, mock2, mock3]);
+
+      return item.value > 0;
+    });
+
+    expect(indices).toEqual([0, 1, 2]);
+  });
+
+  it('should forward index and array to some predicate', () => {
+    const list = List.of(mock1, mock2, mock3);
+    const indices: number[] = [];
+
+    list.some((item, index, array) => {
+      indices.push(index!);
+      expect(array).toEqual([mock1, mock2, mock3]);
+
+      return false;
+    });
+
+    expect(indices).toEqual([0, 1, 2]);
+  });
+
+  it('should forward index and array to findIndex predicate', () => {
+    const list = List.of(mock1, mock2, mock3);
+    const indices: number[] = [];
+
+    list.findIndex((item, index, array) => {
+      indices.push(index!);
+      expect(array).toEqual([mock1, mock2, mock3]);
+
+      return false;
+    });
+
+    expect(indices).toEqual([0, 1, 2]);
+  });
+
+  it('should forward index and array to reduce reducer', () => {
+    const list = List.of(mock1, mock2, mock3);
+    const indices: number[] = [];
+
+    list.reduce((acc, item, index, array) => {
+      indices.push(index!);
+      expect(array).toEqual([mock1, mock2, mock3]);
+
+      return acc + item.value;
+    }, 0);
+
+    expect(indices).toEqual([0, 1, 2]);
+  });
+
   it('should return underlying array with toArray', () => {
     const list = List.of(mock1, mock2);
 

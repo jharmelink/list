@@ -86,7 +86,7 @@ export class MergeableList<T extends Mergeable<T>> extends AbstractList<T> {
       }
 
       return acc;
-    }, new Array<T>());
+    }, [] as T[]);
 
     return new MergeableList(items);
   }
