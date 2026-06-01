@@ -6,7 +6,7 @@ description:
   comments", "address review feedback", "resolve Copilot/reviewer comments", or wants to clear the review queue on a PR.
 ---
 
-Walk the unresolved review feedback on a cockpit PR end-to-end: fetch → fix → verify → resolve on GitHub.
+Walk the unresolved review feedback on a PR end-to-end: fetch → fix → verify → resolve on GitHub.
 
 ## Inputs
 
@@ -19,28 +19,18 @@ If no PR exists for the current branch, stop and tell the user — do not silent
 
 ## Phase 1 — Fetch unresolved feedback
 
-Delegate to the project script — it owns the GraphQL query and returns one JSON document with thread IDs (needed by
-Phase 5), inline review threads, and top-level PR comments:
+Spawn the `pr-comments-fetch` subagent (runs on haiku) to do this phase — it runs the project script, parses the JSON,
+and returns only the unresolved inline threads (with their thread `id`s, needed by Phase 5) plus top-level human
+comments as structured data. Pass it the target PR or branch if the user gave one; otherwise it defaults to the current
+branch's PR. Pass through any "include outdated threads" instruction the user gave.
 
-```
-.claude/scripts/pr-comments.sh --json [pr-or-branch]
-```
-
-Omit the arg to target the current branch's PR. Output shape: `.data.repository.pullRequest.reviewThreads.nodes[]` and
-`.data.repository.pullRequest.comments.nodes[]`. Parse with `jq`; do not call `gh api` inline.
-
-Filter to **unresolved** items only:
-
-- Inline: every `reviewThreads.nodes` where `isResolved = false`. Keep the `id` (this is the `threadId` needed by
-  `resolveReviewThread`).
-- Top-level: `pullRequest.comments.nodes` from human reviewers (skip bots like `sonarqubecloud[bot]`, CI status posts).
-  These have no thread to resolve — they're just context.
-
-Skip `isOutdated = true` threads unless the user explicitly asked to include them; outdated threads usually point to
-code that has already moved.
+Do not re-run the fetch or call `gh api` inline — the subagent's structured result is the single source of feedback for
+all later phases.
 
 ## Phase 2 — Triage
 
+Spawn the `pr-triage-explore` subagent (read-only, runs on sonnet) with the full batch of comments from Phase 1. It
+reads each file fresh and returns a bucket per comment, so the main thread doesn't burn context re-reading files here.
 Bucket each comment before touching code:
 
 1. **Actionable** — concrete change request anchored to a file + line. Apply.
@@ -49,8 +39,8 @@ Bucket each comment before touching code:
    rewritten in a later commit). Mark as "already fixed" — but **do not auto-resolve**; surface it for confirmation.
 4. **Ambiguous / opinion** — no clear single fix (e.g. "consider extracting this"). Skip and flag.
 
-Read the file fresh before deciding bucket — `diffHunk` shows what the comment was written against, not the current
-state.
+The subagent reads each file fresh before deciding the bucket — `diffHunk` shows what the comment was written against,
+not the current state. Pass it the comments in one call; do not re-fetch from GitHub.
 
 ## Phase 3 — Apply fixes
 
@@ -114,13 +104,11 @@ Final report: one line per thread — `resolved | failed: <reason>`.
 - **Never resolve a thread you didn't fix.** A "question" comment stays unresolved — that's a signal to the reviewer.
 - **Never amend or push commits** as part of this skill. File edits land in the working tree; the user decides when to
   commit.
-- **Do not re-fetch comments per phase.** One `pr-comments.sh --json` call in Phase 1 covers it. Round-tripping is slow
-  and racy.
+- **Do not re-fetch comments per phase.** The `pr-comments-fetch` agent's single `pr-comments.sh --json` call in
+  Phase 1 covers it; reuse its structured result for every later phase. Round-tripping is slow and racy.
 - **Verify before resolving.** A resolved thread on a broken fix is worse than an open thread on broken code — the
   reviewer thinks it's done.
 - **Skip bot top-level comments.** SonarCloud, CI bots, Dependabot summaries are not review feedback. Copilot's _inline_
   review comments DO count and should be processed.
-- **Respect cockpit conventions** when applying fixes: `const` over `let`, `Taf*` over kompas / `dynamic-form/Form*`,
-  `yarn` over `npx`, alphabetical i18n keys. See `.claude/code-style.md`.
-- For multi-step exploration (e.g. tracing a returnTo flow across pages), spawn the `cockpit-explore` subagent rather
-  than greppping inline.
+- **Respect conventions** when applying fixes: `const` over `let`, `yarn` over `npx`. See `.claude/code-style.md`.
+- For multi-step exploration, spawn the `pr-triage-explore` subagent rather than greppping inline.

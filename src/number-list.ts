@@ -25,7 +25,9 @@ export class NumberList extends AbstractList<number> {
   }
 
   filter(predicate: (value: number, index?: number, array?: readonly number[]) => boolean): NumberList {
-    return new NumberList(this.items.filter((value: number, index?: number, array?: readonly number[]) => predicate(value, index, array)));
+    return new NumberList(
+      this.items.filter((value: number, index?: number, array?: readonly number[]) => predicate(value, index, array)),
+    );
   }
 
   filterEmpty(): NumberList {
@@ -33,7 +35,9 @@ export class NumberList extends AbstractList<number> {
   }
 
   flatMap(mapper: (item: number, index?: number, array?: readonly number[]) => readonly number[]): NumberList {
-    return new NumberList(this.items.flatMap((item: number, index?: number, array?: readonly number[]) => mapper(item, index, array)));
+    return new NumberList(
+      this.items.flatMap((item: number, index?: number, array?: readonly number[]) => mapper(item, index, array)),
+    );
   }
 
   flattenToAddableList<K extends Addable<K>>(mapper: (item: number) => readonly K[]): AddableList<K> {
@@ -53,7 +57,9 @@ export class NumberList extends AbstractList<number> {
   }
 
   map(mapper: (value: number, index?: number, array?: readonly number[]) => number): NumberList {
-    return new NumberList(this.items.map((value: number, index?: number, array?: readonly number[]) => mapper(value, index, array)));
+    return new NumberList(
+      this.items.map((value: number, index?: number, array?: readonly number[]) => mapper(value, index, array)),
+    );
   }
 
   /**

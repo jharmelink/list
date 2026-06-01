@@ -24,9 +24,13 @@ export class MergeableList<T extends Mergeable<T>> extends AbstractList<T> {
     return MergeableList.from(Distinct.distinctBy(this.items, identifier));
   }
 
-  filter<S extends T & Mergeable<S>>(predicate: (item: T, index?: number, array?: readonly T[]) => item is S): MergeableList<S>;
+  filter<S extends T & Mergeable<S>>(
+    predicate: (item: T, index?: number, array?: readonly T[]) => item is S,
+  ): MergeableList<S>;
   filter(predicate: (item: T, index?: number, array?: readonly T[]) => boolean): MergeableList<T>;
-  filter<S extends T & Mergeable<S>>(predicate: (item: T, index?: number, array?: readonly T[]) => item is S): MergeableList<S> {
+  filter<S extends T & Mergeable<S>>(
+    predicate: (item: T, index?: number, array?: readonly T[]) => item is S,
+  ): MergeableList<S> {
     return new MergeableList(this.items.filter(predicate));
   }
 
@@ -37,8 +41,12 @@ export class MergeableList<T extends Mergeable<T>> extends AbstractList<T> {
     return new MergeableList(Empty.filter(this.items, value));
   }
 
-  flatMap<K extends Mergeable<K>>(mapper: (item: T, index?: number, array?: readonly T[]) => readonly K[]): MergeableList<K> {
-    return new MergeableList(this.items.flatMap((item: T, index?: number, array?: readonly T[]) => mapper(item, index, array)));
+  flatMap<K extends Mergeable<K>>(
+    mapper: (item: T, index?: number, array?: readonly T[]) => readonly K[],
+  ): MergeableList<K> {
+    return new MergeableList(
+      this.items.flatMap((item: T, index?: number, array?: readonly T[]) => mapper(item, index, array)),
+    );
   }
 
   flattenToAddableList<K extends Addable<K>>(mapper: (item: T) => readonly K[]): AddableList<K> {
@@ -58,7 +66,9 @@ export class MergeableList<T extends Mergeable<T>> extends AbstractList<T> {
   }
 
   map<K extends Mergeable<K>>(mapper: (value: T, index?: number, array?: readonly T[]) => K): MergeableList<K> {
-    return new MergeableList(this.items.map((value: T, index?: number, array?: readonly T[]) => mapper(value, index, array)));
+    return new MergeableList(
+      this.items.map((value: T, index?: number, array?: readonly T[]) => mapper(value, index, array)),
+    );
   }
 
   mergeBy<K>(identifier: (item: T) => K): MergeableList<T> {

@@ -42,9 +42,13 @@ export class ComparableList<T extends Comparable<T>> extends AbstractList<T> {
     );
   }
 
-  filter<S extends T & ComparableList<S>>(predicate: (item: T, index?: number, array?: readonly T[]) => item is S): ComparableList<S>;
+  filter<S extends T & ComparableList<S>>(
+    predicate: (item: T, index?: number, array?: readonly T[]) => item is S,
+  ): ComparableList<S>;
   filter(predicate: (value: T, index?: number, array?: readonly T[]) => boolean): ComparableList<T>;
-  filter<S extends T & ComparableList<S>>(predicate: (item: T, index?: number, array?: readonly T[]) => item is S): ComparableList<S> {
+  filter<S extends T & ComparableList<S>>(
+    predicate: (item: T, index?: number, array?: readonly T[]) => item is S,
+  ): ComparableList<S> {
     return new ComparableList(this.items.filter(predicate));
   }
 
@@ -55,8 +59,12 @@ export class ComparableList<T extends Comparable<T>> extends AbstractList<T> {
     return new ComparableList(Empty.filter(this.items, value));
   }
 
-  flatMap<K extends Comparable<K>>(mapper: (item: T, index?: number, array?: readonly T[]) => readonly K[]): ComparableList<K> {
-    return new ComparableList(this.items.flatMap((item: T, index?: number, array?: readonly T[]) => mapper(item, index, array)));
+  flatMap<K extends Comparable<K>>(
+    mapper: (item: T, index?: number, array?: readonly T[]) => readonly K[],
+  ): ComparableList<K> {
+    return new ComparableList(
+      this.items.flatMap((item: T, index?: number, array?: readonly T[]) => mapper(item, index, array)),
+    );
   }
 
   flattenToAddableList<K extends Addable<K>>(mapper: (item: T) => readonly K[]): AddableList<K> {
@@ -76,7 +84,9 @@ export class ComparableList<T extends Comparable<T>> extends AbstractList<T> {
   }
 
   map<K extends Comparable<K>>(mapper: (value: T, index?: number, array?: readonly T[]) => K): ComparableList<K> {
-    return new ComparableList(this.items.map((value: T, index?: number, array?: readonly T[]) => mapper(value, index, array)));
+    return new ComparableList(
+      this.items.map((value: T, index?: number, array?: readonly T[]) => mapper(value, index, array)),
+    );
   }
 
   toAddableList<K extends Addable<K>>(mapper: (item: T) => K): AddableList<K> {

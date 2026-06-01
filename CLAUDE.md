@@ -10,7 +10,7 @@ yarn test:coverage                     # run tests with coverage thresholds enfo
 yarn test:update                       # update snapshots
 npx vitest run test/list.spec.ts       # run a single test file
 npx vitest run -t "should group by"    # run tests matching a name
-yarn lint                              # eslint src/**/*.ts
+yarn lint                              # eslint (flat config scopes src + test)
 yarn lint:fix                          # eslint --fix
 yarn format                            # prettier --check
 yarn format:fix                        # prettier --write
@@ -37,13 +37,11 @@ Concrete subclasses each add their own transforming/specialized methods and re-d
 
 The `Addable` / `Comparable` / `Mergeable` interfaces (`src/interface/`) are the contracts that gate which typed list a value can live in.
 
-### Conventions to follow when extending
+## Code style
 
-- **Immutability**: never mutate `this.items`. Build a new array (`toSorted`, `concat`, spread, `Array.from`) and return a new instance.
-- **Method overloads**: methods with an optional `mapper` (e.g. `groupBy`, `mapBy`, `distinctBy`) are declared with multiple overload signatures followed by one implementation. Match this pattern when adding similar APIs.
-- **Reusable logic lives in `src/util/`** as classes of `static` methods (`Distinct`, `Empty`, `Shuffle`, `Sort`). Subclasses delegate to these rather than reimplementing — add shared algorithms here.
-- **Conversions**: cross-list conversions come in two forms — `toXxxList(mapper)` (1:1) and `flattenToXxxList(mapper)` (item → array, flattened). Keep both when adding a new list type.
-- **Path alias**: imports use `~/*` → `src/*` (configured in `tsconfig.json`, vite, and vitest). Use it instead of relative paths.
+See `.claude/code-style.md` for the full list of code style rules. Read that file before writing or reviewing code in
+this project. When the user gives a new code style rule, add it to `.claude/code-style.md` — that file is the single
+source of truth for style in this repo. Do not save style rules to auto-memory.
 
 ### Build & release
 

@@ -25,7 +25,9 @@ export class StringList extends AbstractList<string> {
   }
 
   filter(predicate: (value: string, index?: number, array?: readonly string[]) => boolean): StringList {
-    return new StringList(this.items.filter((value: string, index?: number, array?: readonly string[]) => predicate(value, index, array)));
+    return new StringList(
+      this.items.filter((value: string, index?: number, array?: readonly string[]) => predicate(value, index, array)),
+    );
   }
 
   filterEmpty(): StringList {
@@ -33,7 +35,9 @@ export class StringList extends AbstractList<string> {
   }
 
   flatMap(mapper: (item: string, index?: number, array?: readonly string[]) => readonly string[]): StringList {
-    return new StringList(this.items.flatMap((item: string, index?: number, array?: readonly string[]) => mapper(item, index, array)));
+    return new StringList(
+      this.items.flatMap((item: string, index?: number, array?: readonly string[]) => mapper(item, index, array)),
+    );
   }
 
   flattenToAddableList<K extends Addable<K>>(mapper: (item: string) => readonly K[]): AddableList<K> {
@@ -57,7 +61,9 @@ export class StringList extends AbstractList<string> {
   }
 
   map(mapper: (value: string, index?: number, array?: readonly string[]) => string): StringList {
-    return new StringList(this.items.map((value: string, index?: number, array?: readonly string[]) => mapper(value, index, array)));
+    return new StringList(
+      this.items.map((value: string, index?: number, array?: readonly string[]) => mapper(value, index, array)),
+    );
   }
 
   sort(): StringList {

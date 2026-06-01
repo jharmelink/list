@@ -36,9 +36,13 @@ export class AddableList<T extends Addable<T>> extends AbstractList<T> {
     return AddableList.from(Distinct.distinctBy(this.items, identifier));
   }
 
-  filter<S extends T & AddableList<S>>(predicate: (item: T, index?: number, array?: readonly T[]) => item is S): AddableList<S>;
+  filter<S extends T & AddableList<S>>(
+    predicate: (item: T, index?: number, array?: readonly T[]) => item is S,
+  ): AddableList<S>;
   filter(predicate: (value: T, index?: number, array?: readonly T[]) => boolean): AddableList<T>;
-  filter<S extends T & AddableList<S>>(predicate: (item: T, index?: number, array?: readonly T[]) => item is S): AddableList<S> {
+  filter<S extends T & AddableList<S>>(
+    predicate: (item: T, index?: number, array?: readonly T[]) => item is S,
+  ): AddableList<S> {
     return new AddableList(this.items.filter(predicate));
   }
 
@@ -49,8 +53,12 @@ export class AddableList<T extends Addable<T>> extends AbstractList<T> {
     return new AddableList(Empty.filter(this.items, value));
   }
 
-  flatMap<K extends Addable<K>>(mapper: (item: T, index?: number, array?: readonly T[]) => readonly K[]): AddableList<K> {
-    return new AddableList(this.items.flatMap((item: T, index?: number, array?: readonly T[]) => mapper(item, index, array)));
+  flatMap<K extends Addable<K>>(
+    mapper: (item: T, index?: number, array?: readonly T[]) => readonly K[],
+  ): AddableList<K> {
+    return new AddableList(
+      this.items.flatMap((item: T, index?: number, array?: readonly T[]) => mapper(item, index, array)),
+    );
   }
 
   flattenToComparableList<K extends Comparable<K>>(mapper: (item: T) => readonly K[]): ComparableList<K> {
@@ -70,7 +78,9 @@ export class AddableList<T extends Addable<T>> extends AbstractList<T> {
   }
 
   map<K extends Addable<K>>(mapper: (value: T, index?: number, array?: readonly T[]) => K): AddableList<K> {
-    return new AddableList(this.items.map((value: T, index?: number, array?: readonly T[]) => mapper(value, index, array)));
+    return new AddableList(
+      this.items.map((value: T, index?: number, array?: readonly T[]) => mapper(value, index, array)),
+    );
   }
 
   toComparableList<K extends Comparable<K>>(mapper: (item: T) => K): ComparableList<K> {
