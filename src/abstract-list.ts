@@ -33,7 +33,7 @@ export abstract class AbstractList<T> {
   }
 
   every(predicate: (item: T, index?: number, array?: readonly T[]) => boolean): boolean {
-    return this.items.every((element, index, array) => predicate(element, index, array));
+    return this.items.every((item, index, array) => predicate(item, index, array));
   }
 
   first(): T | undefined {
@@ -47,7 +47,7 @@ export abstract class AbstractList<T> {
   }
 
   findIndex(predicate: (item: T, index?: number, array?: readonly T[]) => boolean): number {
-    return this.items.findIndex((element, index, array) => predicate(element, index, array));
+    return this.items.findIndex((item, index, array) => predicate(item, index, array));
   }
 
   get(index: number): T | undefined {
@@ -100,7 +100,7 @@ export abstract class AbstractList<T> {
 
   mapBy<K, L>(identifier: (item: T) => K, mapper: (item: T) => L): Map<K, L>;
 
-  mapBy<K, L>(identifier: (item: T) => K, mapper?: (item: T) => L): Map<K, T | L> {
+  mapBy<K, L>(identifier: (item: T) => K, mapper?: (item: T) => L): Map<K, T> | Map<K, L> {
     if (!mapper) {
       return this.reduce((acc: Map<K, T>, cur: T) => {
         const key = identifier(cur);
@@ -121,11 +121,11 @@ export abstract class AbstractList<T> {
   }
 
   reduce<K>(reducer: (acc: K, cur: T, index?: number, array?: readonly T[]) => K, initialValue: K): K {
-    return this.items.reduce((accumulator, element, index, array) => reducer(accumulator, element, index, array), initialValue);
+    return this.items.reduce((acc, cur, index, array) => reducer(acc, cur, index, array), initialValue);
   }
 
   some(predicate: (item: T, index?: number, array?: readonly T[]) => boolean): boolean {
-    return this.items.some((element, index, array) => predicate(element, index, array));
+    return this.items.some((item, index, array) => predicate(item, index, array));
   }
 
   toArray(): readonly T[] {
