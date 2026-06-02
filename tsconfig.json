@@ -1,21 +1,18 @@
 {
   "compilerOptions": {
-    "declaration": true,
-    "emitDeclarationOnly": true,
     "module": "ES2015",
     "moduleResolution": "Bundler",
-    "outDir": "dist",
     "paths": {
       "~/*": [
         "./src/*"
       ]
     },
     "removeComments": false,
-    "rootDir": "src",
     "strict": true,
     "target": "ESNext"
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "test/**/*"
   ]
 }
