@@ -6,8 +6,6 @@ import { NumberList } from '~/number-list';
 import { StringList } from '~/string-list';
 import { Distinct } from '~/util/distinct';
 import { Empty } from '~/util/empty';
-import { Shuffle } from '~/util/shuffle';
-import { Sort } from '~/util/sort';
 
 export class ComparableList<T extends Comparable<T>> extends AbstractList<T> {
   constructor(items?: readonly T[]) {
@@ -20,14 +18,6 @@ export class ComparableList<T extends Comparable<T>> extends AbstractList<T> {
 
   static of<T extends Comparable<T>>(...items: readonly T[]): ComparableList<T> {
     return new ComparableList(items);
-  }
-
-  concat(items?: ConcatArray<T>): ComparableList<T> {
-    if (!items) {
-      return this;
-    }
-
-    return new ComparableList(this.items.concat(items));
   }
 
   distinctBy<K>(identifier: (item: T) => K): ComparableList<T> {
@@ -52,9 +42,13 @@ export class ComparableList<T extends Comparable<T>> extends AbstractList<T> {
     );
   }
 
-  filter<S extends T & ComparableList<S>>(predicate: (item: T, index?: number, array?: readonly T[]) => item is S): ComparableList<S>;
+  filter<S extends T & Comparable<S>>(
+    predicate: (item: T, index?: number, array?: readonly T[]) => item is S,
+  ): ComparableList<S>;
   filter(predicate: (value: T, index?: number, array?: readonly T[]) => boolean): ComparableList<T>;
-  filter<S extends T & ComparableList<S>>(predicate: (item: T, index?: number, array?: readonly T[]) => item is S): ComparableList<S> {
+  filter<S extends T & Comparable<S>>(
+    predicate: (item: T, index?: number, array?: readonly T[]) => item is S,
+  ): ComparableList<S> {
     return new ComparableList(this.items.filter(predicate));
   }
 
@@ -65,8 +59,12 @@ export class ComparableList<T extends Comparable<T>> extends AbstractList<T> {
     return new ComparableList(Empty.filter(this.items, value));
   }
 
-  flatMap<K extends Comparable<K>>(mapper: (item: T, index?: number, array?: readonly T[]) => readonly K[]): ComparableList<K> {
-    return new ComparableList(this.items.flatMap(mapper));
+  flatMap<K extends Comparable<K>>(
+    mapper: (item: T, index?: number, array?: readonly T[]) => readonly K[],
+  ): ComparableList<K> {
+    return new ComparableList(
+      this.items.flatMap((item: T, index?: number, array?: readonly T[]) => mapper(item, index, array)),
+    );
   }
 
   flattenToAddableList<K extends Addable<K>>(mapper: (item: T) => readonly K[]): AddableList<K> {
@@ -86,15 +84,9 @@ export class ComparableList<T extends Comparable<T>> extends AbstractList<T> {
   }
 
   map<K extends Comparable<K>>(mapper: (value: T, index?: number, array?: readonly T[]) => K): ComparableList<K> {
-    return new ComparableList(this.items.map(mapper));
-  }
-
-  shuffle(): ComparableList<T> {
-    return new ComparableList(Shuffle.shuffle(this.items));
-  }
-
-  sortBy(identifier: (item: T) => number | string, reverse = false): ComparableList<T> {
-    return new ComparableList(Sort.sort(this.items, identifier, reverse));
+    return new ComparableList(
+      this.items.map((value: T, index?: number, array?: readonly T[]) => mapper(value, index, array)),
+    );
   }
 
   toAddableList<K extends Addable<K>>(mapper: (item: T) => K): AddableList<K> {
@@ -107,10 +99,6 @@ export class ComparableList<T extends Comparable<T>> extends AbstractList<T> {
 
   toNumberList(mapper: (item: T) => number): NumberList {
     return new NumberList(this.items.map(item => mapper(item)));
-  }
-
-  toSorted(compareFn: (a: T, b: T) => number): ComparableList<T> {
-    return new ComparableList(this.items.toSorted(compareFn));
   }
 
   toStringList(mapper: (item: T) => string): StringList {

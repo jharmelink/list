@@ -1,3 +1,6 @@
+import { Shuffle } from '~/util/shuffle';
+import { Sort } from '~/util/sort';
+
 export abstract class AbstractList<T> {
   protected readonly items: readonly T[];
 
@@ -9,8 +12,28 @@ export abstract class AbstractList<T> {
     return this.items.length;
   }
 
-  every(predicate: (item: T, index?: number, array?: readonly T[]) => boolean): boolean {
-    return this.items.every(predicate);
+  protected create(items: readonly T[]): this {
+    return new (this.constructor as new (items?: readonly T[]) => this)(items);
+  }
+
+  concat(items?: ConcatArray<T>): this {
+    return items ? this.create(this.items.concat(items)) : this;
+  }
+
+  shuffle(): this {
+    return this.create(Shuffle.shuffle(this.items));
+  }
+
+  sortBy(identifier: (item: T) => number | string, reverse = false): this {
+    return this.create(Sort.sort(this.items, identifier, reverse));
+  }
+
+  toSorted(compareFn: (a: T, b: T) => number): this {
+    return this.create(this.items.toSorted(compareFn));
+  }
+
+  every(predicate: (item: T, index: number, array: readonly T[]) => boolean): boolean {
+    return this.items.every((item, index, array) => predicate(item, index, array));
   }
 
   first(): T | undefined {
@@ -20,11 +43,11 @@ export abstract class AbstractList<T> {
   }
 
   last(): T | undefined {
-    return this.items[this.items.length - 1];
+    return this.items.at(-1);
   }
 
-  findIndex(predicate: (item: T, index?: number, array?: readonly T[]) => boolean): number {
-    return this.items.findIndex(predicate);
+  findIndex(predicate: (item: T, index: number, array: readonly T[]) => boolean): number {
+    return this.items.findIndex((item, index, array) => predicate(item, index, array));
   }
 
   get(index: number): T | undefined {
@@ -43,11 +66,12 @@ export abstract class AbstractList<T> {
     if (!mapper) {
       return this.reduce((acc: Map<K, T[]>, cur: T) => {
         const key = identifier(cur);
+        const group = acc.get(key);
 
-        if (!acc.has(key)) {
-          acc.set(key, [cur]);
+        if (group) {
+          group.push(cur);
         } else {
-          acc.get(key)!.push(cur);
+          acc.set(key, [cur]);
         }
 
         return acc;
@@ -56,11 +80,12 @@ export abstract class AbstractList<T> {
 
     return this.reduce((acc: Map<K, L[]>, cur: T) => {
       const key = identifier(cur);
+      const group = acc.get(key);
 
-      if (!acc.has(key)) {
-        acc.set(key, [mapper(cur)]);
+      if (group) {
+        group.push(mapper(cur));
       } else {
-        acc.get(key)!.push(mapper(cur));
+        acc.set(key, [mapper(cur)]);
       }
 
       return acc;
@@ -75,7 +100,7 @@ export abstract class AbstractList<T> {
 
   mapBy<K, L>(identifier: (item: T) => K, mapper: (item: T) => L): Map<K, L>;
 
-  mapBy<K, L>(identifier: (item: T) => K, mapper?: (item: T) => L): Map<K, T | L> {
+  mapBy<K, L>(identifier: (item: T) => K, mapper?: (item: T) => L): Map<K, T> | Map<K, L> {
     if (!mapper) {
       return this.reduce((acc: Map<K, T>, cur: T) => {
         const key = identifier(cur);
@@ -95,12 +120,12 @@ export abstract class AbstractList<T> {
     }, new Map<K, L>());
   }
 
-  reduce<K>(reducer: (acc: K, cur: T, index?: number, array?: readonly T[]) => K, initialValue: K): K {
-    return this.items.reduce(reducer, initialValue);
+  reduce<K>(reducer: (acc: K, cur: T, index: number, array: readonly T[]) => K, initialValue: K): K {
+    return this.items.reduce((acc, cur, index, array) => reducer(acc, cur, index, array), initialValue);
   }
 
-  some(predicate: (item: T, index?: number, array?: readonly T[]) => boolean): boolean {
-    return this.items.some(predicate);
+  some(predicate: (item: T, index: number, array: readonly T[]) => boolean): boolean {
+    return this.items.some((item, index, array) => predicate(item, index, array));
   }
 
   toArray(): readonly T[] {

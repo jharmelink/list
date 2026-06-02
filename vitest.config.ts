@@ -1,13 +1,12 @@
-import { resolve } from 'path';
+import { resolve } from 'node:path';
 import { defineConfig } from 'vitest/config';
-import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
-  plugins: [tsconfigPaths()],
   resolve: {
     alias: {
       '@src': resolve(__dirname, 'src/index.ts'),
     },
+    tsconfigPaths: true,
   },
   test: {
     coverage: {

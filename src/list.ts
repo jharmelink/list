@@ -7,8 +7,6 @@ import { NumberList } from '~/number-list';
 import { StringList } from '~/string-list';
 import { Distinct } from '~/util/distinct';
 import { Empty } from '~/util/empty';
-import { Shuffle } from '~/util/shuffle';
-import { Sort } from '~/util/sort';
 
 export class List<T> extends AbstractList<T> {
   constructor(items?: readonly T[]) {
@@ -21,14 +19,6 @@ export class List<T> extends AbstractList<T> {
 
   static of<T>(...items: readonly T[]): List<T> {
     return new List(items);
-  }
-
-  concat(items?: ConcatArray<T>): List<T> {
-    if (!items) {
-      return this;
-    }
-
-    return new List(this.items.concat(items));
   }
 
   distinctBy<K>(identifier: (item: T) => K): List<T>;
@@ -52,11 +42,11 @@ export class List<T> extends AbstractList<T> {
   }
 
   flat<D extends number = 1>(depth?: D): List<FlatArray<readonly T[], D>> {
-    return new List(this.items.flat(depth)) as List<FlatArray<readonly T[], D>>;
+    return new List(this.items.flat(depth));
   }
 
   flatMap<K>(mapper: (item: T, index?: number, array?: readonly T[]) => readonly K[]): List<K> {
-    return new List(this.items.flatMap(mapper));
+    return new List(this.items.flatMap((item: T, index?: number, array?: readonly T[]) => mapper(item, index, array)));
   }
 
   flattenToAddableList<K extends Addable<K>>(mapper: (item: T) => readonly K[]): AddableList<K> {
@@ -80,15 +70,7 @@ export class List<T> extends AbstractList<T> {
   }
 
   map<K>(mapper: (item: T, index?: number, array?: readonly T[]) => K): List<K> {
-    return new List(this.items.map(mapper));
-  }
-
-  shuffle(): List<T> {
-    return new List(Shuffle.shuffle(this.items));
-  }
-
-  sortBy(identifier: (item: T) => number | string, reverse = false): List<T> {
-    return new List(Sort.sort(this.items, identifier, reverse));
+    return new List(this.items.map((item: T, index?: number, array?: readonly T[]) => mapper(item, index, array)));
   }
 
   toAddableList<K extends Addable<K>>(mapper: (item: T) => K): AddableList<K> {
@@ -105,10 +87,6 @@ export class List<T> extends AbstractList<T> {
 
   toNumberList(mapper: (item: T) => number): NumberList {
     return new NumberList(this.items.map(item => mapper(item)));
-  }
-
-  toSorted(compareFn: (a: T, b: T) => number): List<T> {
-    return new List(this.items.toSorted(compareFn));
   }
 
   toStringList(mapper: (item: T) => string): StringList {
