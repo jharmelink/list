@@ -25,7 +25,7 @@ Tests run with `--typecheck`, so type errors in `src/` or `test/` fail the suite
 
 ### Class hierarchy
 
-`AbstractList<T>` (`src/abstract-list.ts`) holds the `readonly items` array and all non-transforming operations shared by every list: `length`, `get`, `first`, `last`, `every`, `some`, `includes`, `findIndex`, `groupBy`, `mapBy`, `reduce`, `toArray`.
+`AbstractList<T>` (`src/abstract-list.ts`) holds the `readonly items` array and all shared operations: non-transforming (`length`, `get`, `first`, `last`, `every`, `some`, `includes`, `findIndex`, `groupBy`, `mapBy`, `reduce`, `toArray`) and shared transforming (`concat`, `shuffle`, `sortBy`, `toSorted`).
 
 Concrete subclasses each add their own transforming/specialized methods and re-declare `from`/`of` static factories:
 
@@ -45,5 +45,5 @@ source of truth for style in this repo. Do not save style rules to auto-memory.
 
 ### Build & release
 
-- Build is a Vite **library** build emitting both ESM (`index.js`) and CJS (`index.cjs`) plus `.d.ts` types (`tsconfig.json` is declaration-only — Vite produces the JS).
+- Build is a Vite **library** build emitting both ESM (`index.js`) and CJS (`index.cjs`) plus `.d.ts` types (`tsconfig.build.json` is declaration-only and used by `vite-plugin-dts` — Vite produces the JS).
 - Releases are automated via **semantic-release** driven by **Conventional Commits** (`commitlint` enforces this). Commit types map to changelog sections in `.releaserc.yaml`: `feat` → Features, `fix` → Bug fixes; `chore`/`perf`/`test` are hidden. Use these prefixes.

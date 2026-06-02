@@ -32,7 +32,7 @@ export abstract class AbstractList<T> {
     return this.create(this.items.toSorted(compareFn));
   }
 
-  every(predicate: (item: T, index?: number, array?: readonly T[]) => boolean): boolean {
+  every(predicate: (item: T, index: number, array: readonly T[]) => boolean): boolean {
     return this.items.every((item, index, array) => predicate(item, index, array));
   }
 
@@ -46,7 +46,7 @@ export abstract class AbstractList<T> {
     return this.items.at(-1);
   }
 
-  findIndex(predicate: (item: T, index?: number, array?: readonly T[]) => boolean): number {
+  findIndex(predicate: (item: T, index: number, array: readonly T[]) => boolean): number {
     return this.items.findIndex((item, index, array) => predicate(item, index, array));
   }
 
@@ -120,11 +120,11 @@ export abstract class AbstractList<T> {
     }, new Map<K, L>());
   }
 
-  reduce<K>(reducer: (acc: K, cur: T, index?: number, array?: readonly T[]) => K, initialValue: K): K {
+  reduce<K>(reducer: (acc: K, cur: T, index: number, array: readonly T[]) => K, initialValue: K): K {
     return this.items.reduce((acc, cur, index, array) => reducer(acc, cur, index, array), initialValue);
   }
 
-  some(predicate: (item: T, index?: number, array?: readonly T[]) => boolean): boolean {
+  some(predicate: (item: T, index: number, array: readonly T[]) => boolean): boolean {
     return this.items.some((item, index, array) => predicate(item, index, array));
   }
 

@@ -36,11 +36,11 @@ export class AddableList<T extends Addable<T>> extends AbstractList<T> {
     return AddableList.from(Distinct.distinctBy(this.items, identifier));
   }
 
-  filter<S extends T & AddableList<S>>(
+  filter<S extends T & Addable<S>>(
     predicate: (item: T, index?: number, array?: readonly T[]) => item is S,
   ): AddableList<S>;
   filter(predicate: (value: T, index?: number, array?: readonly T[]) => boolean): AddableList<T>;
-  filter<S extends T & AddableList<S>>(
+  filter<S extends T & Addable<S>>(
     predicate: (item: T, index?: number, array?: readonly T[]) => item is S,
   ): AddableList<S> {
     return new AddableList(this.items.filter(predicate));
